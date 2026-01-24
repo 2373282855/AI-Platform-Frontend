@@ -85,6 +85,7 @@ export const staticRouter: RouteRecordRaw[] = [
           isAffix: "1" // 是否缓存固定路由[0是，1否]
         }
       },
+      
       {
         path: "/encryption", // [唯一]
         component: () => import("@/views/utility/encryption.vue"),

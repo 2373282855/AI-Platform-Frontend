@@ -42,7 +42,7 @@ const reset_search = async () => {
 
 const view_report = async (result_id: any) => {
   // 待修改：前端地址ip:port
-  window.open("http://10.12.2.78:5730/web_report?result_id=" + result_id);
+  window.open("http://127.0.0.1:5730/web_report?result_id=" + result_id);
 };
 // 生命周期钩子
 onMounted(() => {

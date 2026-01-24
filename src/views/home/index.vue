@@ -3,14 +3,14 @@
     <el-card class="rounded-md" shadow="hover">
       <div style="float: right">
       </div>
-      <div class="flex flex-items-center" v-waterMarker="{ text: 'L-Tester', textColor: '#D9D9D9' }">
+      <div class="flex flex-items-center" v-waterMarker="{ text: 'BeautyPlus AI效率', textColor: '#D9D9D9' }">
         <img class="w-80px h-80px rounded-full select-none user-avatar" src="@/assets/images/logo/logo.webp"
           alt="avatar" />
         <div class="p-l-20px">
           <div class="font-bold p-b-8px whitespace-nowrap">
             <span>{{ "用户：" + username }}</span>
           </div>
-          <div class="font-bold whitespace-nowrap">欢迎来到 L-Tester 测试平台。🌻
+          <div class="font-bold whitespace-nowrap">欢迎来到 BeautyPlus 效率工具平台。🌻
           </div>
         </div>
       </div>
@@ -26,13 +26,13 @@
       </el-col>
       <el-col :span="12" :lg="12" :md="12" :sm="24" :xs="24" class="m-t-5px">
         <el-card class="rounded-md" shadow="hover">
-          <template #header> 🐻地区异常订单排行 </template>
+          <template #header> 🔥功能使用排行 </template>
           <KoiLeftChart></KoiLeftChart>
         </el-card>
       </el-col>
       <el-col :span="12" :lg="12" :md="12" :sm="24" :xs="24" class="m-t-5px">
         <el-card class="rounded-md" shadow="hover">
-          <template #header> 🐻‍❄️近10日订单量 </template>
+          <template #header> 🐻‍❄️近10日访问平台量 </template>
           <KoiRightChart></KoiRightChart>
         </el-card>
       </el-col>

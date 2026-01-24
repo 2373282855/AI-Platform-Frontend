@@ -10,7 +10,7 @@
         <div class="absolute text-center select-none">
           <el-image class="w-400px h-360px mb-50px animate-float <md:hidden <lg:w-360px h-320px" :src="bg" />
           <div class="font-bold text-3xl chroma-text mb-6px text-center <lg:text-2xl <md:hidden">
-            {{ $t("login.welcome") }} {{ loginTitle || "L-Tester 管理平台" }}
+            {{ $t("login.welcome") }} {{ loginTitle || "BeautyPlus AI效率 管理平台" }}
           </div>
           <div class="chroma-text text-lg text-center <md:hidden">{{ $t("login.description") }}</div>
         </div>
@@ -19,7 +19,7 @@
         class="dark:bg-#161616 bg-gray-100 flex items-center justify-center flex-col">
         <div class="flex items-center">
           <el-image class="rounded-full w-36px h-36px" :src="logo" />
-          <div class="ml-6px font-bold text-xl">{{ loginTitle || "L-Tester 管理平台" }}</div>
+          <div class="ml-6px font-bold text-xl">{{ loginTitle || "BeautyPlus AI效率 管理平台" }}</div>
         </div>
         <div class="flex items-center space-x-3 text-gray-400 mt-16px mb-16px">
           <span class="h-1px w-16 bg-gray-300 inline-block"></span>

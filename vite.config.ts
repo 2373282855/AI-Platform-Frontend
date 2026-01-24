@@ -67,7 +67,7 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
         "/api": {
           // 配置哪个环境下的
           target: env.VITE_SERVER,
-          rewrite: path => path.replace(new RegExp("^/api"), ""),
+          //rewrite: path => path.replace(new RegExp("^/api"), ""),
           // 路径重写，例如：将路径中包含dev-api字段替换为空。注意：只有请求真实后端接口才会有用，使用mock接口还是得带koi
           // 允许跨域
           changeOrigin: true,
