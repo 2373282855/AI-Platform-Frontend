@@ -304,6 +304,29 @@ export const staticRouter: RouteRecordRaw[] = [
           isAffix: "1" // 是否缓存固定路由[0是，1否]
         }
       },
+      // 把这段加到数组里去
+      {
+        path: "/intentra",
+        name: "intentra",
+        // 依然用 Layout 骨架，这样才有左侧菜单和顶部栏
+        component: () => import("@/layouts/index.vue"),
+        meta: {
+          title: "Intentra自动化",
+          icon: "Cpu" // 这是一个像芯片一样的图标，适合此功能
+        },
+        children: [
+          {
+            path: "index",
+            name: "IntentraIndex",
+            // 这里指向我们刚才新建的那个 index.vue
+            component: () => import("@/views/intentra/index.vue"),
+            meta: {
+              title: "用例管理",
+              icon: "List"
+            }
+          }
+        ]
+      },
       {
         path: "/app_auto", // [唯一]
         component: () => import("@/views/app_view/app.vue"),
