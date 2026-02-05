@@ -1,4 +1,5 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios from "axios";
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
 import { MsgError } from "@/utils/koi.ts";
 import { LOGIN_URL } from "@/config/index.ts";
@@ -155,8 +156,8 @@ class Yu {
     return this.instance.put(url, data);
   }
   // Delete请求  /yu/role/1
-  delete<T = Result>(url: string): Promise<T> {
-    return this.instance.delete(url);
+  delete<T = Result>(url: string, params?: object): Promise<T> {
+    return this.instance.delete(url, { params });
   }
   // 图片上传
   upload<T = Result>(url: string, params?: object): Promise<T> {

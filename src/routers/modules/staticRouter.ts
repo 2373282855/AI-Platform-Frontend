@@ -61,7 +61,7 @@ export const staticRouter: RouteRecordRaw[] = [
     path: "/utility", // 路由访问路径[唯一]
     component: Layout, // 登录进入这个页面，这个页面是整个布局
     meta: {
-      title: "实用工具", // 标题
+      title: "常用工具", // 标题
       enName: "Static Router", // 英文名称
       icon: "Box", // 图标
       isHide: "1", // 代表路由在菜单中是否隐藏，是否隐藏[0隐藏，1显示]
@@ -71,20 +71,6 @@ export const staticRouter: RouteRecordRaw[] = [
       isAffix: "0" // 是否缓存固定路由[0是，1否]
     },
     children: [
-      {
-        path: "/json_parse", // [唯一]
-        component: () => import("@/views/utility/json_parse.vue"),
-        meta: {
-          title: "JSON解析", // 标题
-          enName: "JSON Parse", // 英文名称
-          icon: "Switch", // 图标
-          isHide: "0", // 代表路由在菜单中是否隐藏，是否隐藏[0隐藏，1显示]
-          isLink: "", // 是否外链[有值则是外链]
-          isKeepAlive: "1", // 是否缓存路由数据[0是，1否]
-          isFull: "1", // 是否缓存全屏[0是，1否]
-          isAffix: "1" // 是否缓存固定路由[0是，1否]
-        }
-      },
       
       {
         path: "/encryption", // [唯一]
@@ -112,6 +98,62 @@ export const staticRouter: RouteRecordRaw[] = [
           isKeepAlive: "1", // 是否缓存路由数据[0是，1否]
           isFull: "1", // 是否缓存全屏[0是，1否]
           isAffix: "1" // 是否缓存固定路由[0是，1否]
+        }
+      },
+      {
+        path: "/json_compare",
+        component: () => import("@/views/utility/json_compare.vue"),
+        meta: {
+          title: "JSON对比",
+          enName: "JSON Compare",
+          icon: "Operation",
+          isHide: "1",
+          isLink: "",
+          isKeepAlive: "1",
+          isFull: "1",
+          isAffix: "1"
+        }
+      },
+      {
+        path: "/json_validate",
+        component: () => import("@/views/utility/json_validate.vue"),
+        meta: {
+          title: "JSON校验",
+          enName: "JSON Validate",
+          icon: "CircleCheck",
+          isHide: "1",
+          isLink: "",
+          isKeepAlive: "1",
+          isFull: "1",
+          isAffix: "1"
+        }
+      },
+      {
+        path: "/image_library",
+        component: () => import("@/views/utility/image_library.vue"),
+        meta: {
+          title: "图片库",
+          enName: "Image Library",
+          icon: "Picture",
+          isHide: "1",
+          isLink: "",
+          isKeepAlive: "1",
+          isFull: "1",
+          isAffix: "1"
+        }
+      },
+      {
+        path: "/video_library",
+        component: () => import("@/views/utility/video_library.vue"),
+        meta: {
+          title: "视频库",
+          enName: "Video Library",
+          icon: "VideoCamera",
+          isHide: "1",
+          isLink: "",
+          isKeepAlive: "1",
+          isFull: "1",
+          isAffix: "1"
         }
       }
     ]
@@ -147,7 +189,7 @@ export const staticRouter: RouteRecordRaw[] = [
     ]
   },
   {
-    path: "/api_auto", // 路由访问路径[唯一]"
+    path: "/api_auto", // 路由访问路径[唯一]
     component: Layout,
     meta: {
       title: "接口自动化",
@@ -305,45 +347,17 @@ export const staticRouter: RouteRecordRaw[] = [
         }
       },
       {
-        path: "/app_auto", // [唯一]
-        component: () => import("@/views/app_view/app.vue"),
+        path: "/channel_detect",
+        component: () => import("@/views/app_view/channel_detect.vue"),
         meta: {
-          title: "APP自动化", // 标题
-          enName: "APP Auto", // 英文名称
-          icon: "Iphone", // 图标
-          isHide: "1", // 代表路由在菜单中是否隐藏，是否隐藏[0隐藏，1显示]
-          isLink: "", // 是否外链[有值则是外链]
-          isKeepAlive: "1", // 是否缓存路由数据[0是，1否]
-          isFull: "1", // 是否缓存全屏[0是，1否]
-          isAffix: "1" // 是否缓存固定路由[0是，1否]
-        }
-      },
-      {
-        path: "/app_img", // [唯一]
-        component: () => import("@/views/app_view/img.vue"),
-        meta: {
-          title: "图像库", // 标题
-          enName: "Image Library", // 英文名称
-          icon: "PictureFilled", // 图标
-          isHide: "1", // 代表路由在菜单中是否隐藏，是否隐藏[0隐藏，1显示]
-          isLink: "", // 是否外链[有值则是外链]
-          isKeepAlive: "1", // 是否缓存路由数据[0是，1否]
-          isFull: "1", // 是否缓存全屏[0是，1否]
-          isAffix: "1" // 是否缓存固定路由[0是，1否]
-        }
-      },
-      {
-        path: "/app_result_list", // [唯一]
-        component: () => import("@/views/app_view/app_result_list.vue"),
-        meta: {
-          title: "APP结果", // 标题
-          enName: "Test Result", // 英文名称
-          icon: "Document", // 图标
-          isHide: "1", // 代表路由在菜单中是否隐藏，是否隐藏[0隐藏，1显示]
-          isLink: "", // 是否外链[有值则是外链]
-          isKeepAlive: "1", // 是否缓存路由数据[0是，1否]
-          isFull: "1", // 是否缓存全屏[0是，1否]
-          isAffix: "1" // 是否缓存固定路由[0是，1否]
+          title: "Android渠道检测",
+          enName: "Channel Detect",
+          icon: "Search",
+          isHide: "1",
+          isLink: "",
+          isKeepAlive: "1",
+          isFull: "1",
+          isAffix: "1"
         }
       }
     ]
@@ -378,6 +392,20 @@ export const staticRouter: RouteRecordRaw[] = [
       }
     },
     {
+      path: "/intentra_suite",
+      component: () => import("@/views/intentra/suite_manage/index.vue"),
+      meta: {
+        title: "测试集管理",
+        enName: "Suite Manage",
+        icon: "Collection",
+        isHide: "1",
+        isLink: "",
+        isKeepAlive: "1",
+        isFull: "1",
+        isAffix: "1"
+      }
+    },
+    {
       path: "/intentra_result",
       component: () => import("@/views/intentra/result/index.vue"),
       meta: {
@@ -393,6 +421,64 @@ export const staticRouter: RouteRecordRaw[] = [
     }
   ]
 },
+  {
+    path: "/ai_tools",
+    component: Layout,
+    meta: {
+      title: "AI提效工具",
+      enName: "AI Tools",
+      icon: "MagicStick",
+      isHide: "1",
+      isLink: "",
+      isKeepAlive: "0",
+      isFull: "0",
+      isAffix: "0"
+    },
+    children: [
+      {
+        path: "/ai_generate",
+        component: () => import("@/views/ai_tools/generate/index.vue"),
+        meta: {
+          title: "AI生成脚本",
+          enName: "AI Generate Script",
+          icon: "Cpu",
+          isHide: "1",
+          isLink: "",
+          isKeepAlive: "1",
+          isFull: "1",
+          isAffix: "1"
+        }
+      },
+      {
+        path: "/ai_requirement_generate",
+        component: () => import("@/views/ai_tools/requirement_generate/index.vue"),
+        meta: {
+          title: "AI需求生成用例",
+          enName: "AI Requirement Generate",
+          icon: "Notebook",
+          isHide: "1",
+          isLink: "",
+          isKeepAlive: "1",
+          isFull: "1",
+          isAffix: "1"
+        }
+      },
+    {
+        path: "/xmind_to_excel",
+        component: () => import("@/views/ai_tools/xmind_convert/index.vue"),
+        meta: {
+          title: "Xmind转Excel",
+          enName: "Xmind to Excel",
+          icon: "Switch",
+          isHide: "1",
+          isLink: "",
+          isKeepAlive: "1",
+          isFull: "1",
+          isAffix: "1"
+        }
+      }
+    ]
+  },
   {
     path: "/task",
     component: Layout,
@@ -429,6 +515,36 @@ export const staticRouter: RouteRecordRaw[] = [
           enName: "Scheduled tasks", // 英文名称
           icon: "List", // 图标
           isHide: "1", // 代表路由在菜单中是否隐藏，是否隐藏[0隐藏，1显示]
+          isLink: "",
+          isKeepAlive: "1",
+          isFull: "1",
+          isAffix: "1"
+        }
+      }
+    ]
+  },
+  {
+    path: "/qa_manage",
+    component: Layout,
+    meta: {
+      title: "问题答疑",
+      enName: "Q&A Manage",
+      icon: "QuestionFilled",
+      isHide: "1",
+      isLink: "",
+      isKeepAlive: "0",
+      isFull: "0",
+      isAffix: "0"
+    },
+    children: [
+      {
+        path: "/qa",
+        component: () => import("@/views/ai_tools/qa/index.vue"),
+        meta: {
+          title: "问题答疑",
+          enName: "Q&A",
+          icon: "QuestionFilled",
+          isHide: "1",
           isLink: "",
           isKeepAlive: "1",
           isFull: "1",
@@ -523,20 +639,7 @@ export const staticRouter: RouteRecordRaw[] = [
       isAffix: "0" // 是否缓存固定路由[0是，1否]
     }
   },
-  {
-    path: "/app_report", // 路由访问路径[唯一]
-    component: () => import("@/views/app_view/app_report.vue"),
-    meta: {
-      title: "APP测试报告", // 标题
-      enName: "Test Report", // 英文名称
-      icon: "Iphone", // 图标
-      isHide: "0", // 代表路由在菜单中是否隐藏，是否隐藏[0隐藏，1显示]
-      isLink: "", // 是否外链[有值则是外链]
-      isKeepAlive: "0", // 是否缓存路由数据[0是，1否]
-      isFull: "0", // 是否缓存全屏[0是，1否]
-      isAffix: "0" // 是否缓存固定路由[0是，1否]
-    }
-  },
+
   {
     path: "/_api_report", // 路由访问路径[唯一]
     component: () => import("@/views/api_view/api_report.vue"),

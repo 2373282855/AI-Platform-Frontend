@@ -7,6 +7,7 @@ import KoiSelectIcon from "./KoiSelectIcon/Index.vue";
 import KoiUploadFiles from "./KoiUpload/Files.vue";
 import KoiUploadImage from "./KoiUpload/Image.vue";
 import KoiUploadImages from "./KoiUpload/Images.vue";
+import KoiUploadBatch from "./KoiUpload/Batch.vue";
 import MobileDrawer from "./MobileDrawer/Index.vue";
 import KoiExcel from "./KoiExcel/Index.vue";
 import KoiTagFilter from "./KoiTagFilter/Index.vue";
@@ -26,6 +27,7 @@ const components: { [name: string]: Component } = {
   KoiUploadFiles,
   KoiUploadImage,
   KoiUploadImages,
+  KoiUploadBatch,
   MobileDrawer,
   KoiExcel,
   KoiTagFilter,

@@ -66,7 +66,7 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
         // 代理跨域
         "/api": {
           // 配置哪个环境下的
-          target: env.VITE_SERVER,
+          target: 'http://localhost:8000',
           //rewrite: path => path.replace(new RegExp("^/api"), ""),
           // 路径重写，例如：将路径中包含dev-api字段替换为空。注意：只有请求真实后端接口才会有用，使用mock接口还是得带koi
           // 允许跨域
@@ -85,8 +85,9 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
     },
     esbuild: {
       // 在生产环境全部去除console 和 debugger
-      drop: env.VITE_DROP_CONSOLE.length < 5 ? ["console", "debugger"] : []
+      drop: (env.VITE_DROP_CONSOLE && env.VITE_DROP_CONSOLE.length < 5) ? ["console", "debugger"] : []
     },
+    
     // 预编译，增加访问速度，针对node_modules
     optimizeDeps: {
       include: [

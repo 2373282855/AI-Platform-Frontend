@@ -54,7 +54,15 @@
             </el-select>
           </div>
           <div class="toolbar-right">
-            <el-button type="primary" @click="handleAdd" :disabled="!currentNode || currentNode.level < 3">
+            <el-button type="success" @click="handleBatchRun" :disabled="selectedCases.length === 0">
+              <el-icon><VideoPlay /></el-icon>
+              批量执行 ({{ selectedCases.length }})
+            </el-button>
+            <el-button type="warning" @click="handleAddToSuite" :disabled="selectedCases.length === 0">
+              <el-icon><Collection /></el-icon>
+              加入测试集 ({{ selectedCases.length }})
+            </el-button>
+            <el-button type="primary" @click="handleAdd" :disabled="!currentNode">
               <el-icon><Plus /></el-icon>
               新增用例
             </el-button>
@@ -69,7 +77,9 @@
           v-loading="loading"
           style="width: 100%; margin-top: 15px"
           :header-cell-style="{ background: '#f5f7fa', color: '#606266' }"
+          @selection-change="handleSelectionChange"
         >
+          <el-table-column type="selection" width="55" align="center" />
           <el-table-column type="index" label="序号" width="60" align="center" />
           <el-table-column prop="title" label="用例名称" min-width="200" show-overflow-tooltip />
           <el-table-column prop="status" label="状态" width="100" align="center">
@@ -231,6 +241,47 @@
     删除
   </li>
 </ul>
+
+<!-- 测试集管理弹窗 -->
+<el-dialog
+  v-model="suiteDialogVisible"
+  title="加入测试集"
+  width="500px"
+  :close-on-click-modal="false"
+>
+  <el-form :model="suiteForm" label-width="100px">
+    <el-form-item label="测试集">
+      <el-select
+        v-model="suiteForm.suite_id"
+        placeholder="选择已有测试集或新建"
+        style="width: 100%"
+        clearable
+      >
+        <el-option
+          v-for="suite in suiteList"
+          :key="suite.id"
+          :label="`${suite.name} (${suite.case_count}个用例)`"
+          :value="suite.id"
+        />
+      </el-select>
+    </el-form-item>
+    <el-form-item label="或新建测试集">
+      <el-input v-model="suiteForm.new_suite_name" placeholder="输入新测试集名称" />
+    </el-form-item>
+    <el-form-item label="描述">
+      <el-input
+        v-model="suiteForm.description"
+        type="textarea"
+        :rows="3"
+        placeholder="可选"
+      />
+    </el-form-item>
+  </el-form>
+  <template #footer>
+    <el-button @click="suiteDialogVisible = false">取消</el-button>
+    <el-button type="primary" @click="handleSaveSuite">确定</el-button>
+  </template>
+</el-dialog>
   </div>
 </template>
 
@@ -247,19 +298,35 @@ import {
   Edit,
   VideoPlay,
   Delete,
-  InfoFilled
+  InfoFilled,
+  Collection
 } from '@element-plus/icons-vue';
-import { getTree, getCaseList, saveCase, deleteCase, getDevices, runCase } from '@/api/intentra';
+import {
+  getTree, getCaseList, saveCase, deleteCase, getDevices, runCase,
+  getSuiteList, saveSuite, getSuiteCases
+} from '@/api/intentra';
 
-const treeData = ref([]);
+const treeData = ref<any[]>([]);
 const currentNode = ref<any>(null);
-const caseList = ref([]);
+const caseList = ref<any[]>([]);
 const loading = ref(false);
 const page = ref(1);
 const limit = ref(20);
 const total = ref(0);
 const searchKeyword = ref('');
 const statusFilter = ref('');
+
+// 选中的用例
+const selectedCases = ref<any[]>([]);
+
+// 测试集相关
+const suiteDialogVisible = ref(false);
+const suiteList = ref<any[]>([]);
+const suiteForm = reactive({
+  suite_id: null,
+  new_suite_name: '',
+  description: ''
+});
 
 // 右键菜单相关
 const contextMenuVisible = ref(false);
@@ -293,7 +360,7 @@ const rules = {
 };
 
 const deviceDialogVisible = ref(false);
-const devices = ref([]);
+const devices = ref<any[]>([]);
 const loadingDevices = ref(false);
 const currentRunCase = ref<any>(null);
 
@@ -312,10 +379,8 @@ const loadTree = async () => {
 
 const handleNodeClick = (data: any) => {
   currentNode.value = data;
-  if (data.level === 3) {
-    page.value = 1;
-    loadCases();
-  }
+  page.value = 1;
+  loadCases();
 };
 
 // 添加根模块
@@ -330,7 +395,7 @@ const handleAddRootModule = () => {
 };
 
 const loadCases = async () => {
-  if (!currentNode.value || currentNode.value.level < 3) return;
+  if (!currentNode.value) return;
   loading.value = true;
   try {
     const res = await getCaseList({
@@ -506,6 +571,100 @@ const handleDeleteModule = async () => {
     loadTree();
   } catch {}
   contextMenuVisible.value = false;
+};
+
+// 处理选中变化
+const handleSelectionChange = (selection: any[]) => {
+  selectedCases.value = selection;
+};
+
+// 批量执行
+const handleBatchRun = async () => {
+  if (selectedCases.value.length === 0) {
+    return ElMessage.warning('请先选择用例');
+  }
+  
+  loadingDevices.value = true;
+  deviceDialogVisible.value = true;
+  
+  try {
+    const res = await getDevices();
+    devices.value = res.data;
+    if (devices.value.length === 0) {
+      ElMessage.warning('未检测到设备，请确保已连接并开启 USB 调试');
+    }
+  } finally {
+    loadingDevices.value = false;
+  }
+};
+
+// 加入测试集
+const handleAddToSuite = async () => {
+  if (selectedCases.value.length === 0) {
+    return ElMessage.warning('请先选择用例');
+  }
+  
+  // 加载测试集列表
+  try {
+    const res = await getSuiteList();
+    suiteList.value = res.data;
+  } catch (e: any) {
+    ElMessage.error('加载测试集列表失败');
+  }
+  
+  // 重置表单
+  Object.assign(suiteForm, {
+    suite_id: null,
+    new_suite_name: '',
+    description: ''
+  });
+  
+  suiteDialogVisible.value = true;
+};
+
+// 保存到测试集
+const handleSaveSuite = async () => {
+  if (!suiteForm.suite_id && !suiteForm.new_suite_name) {
+    return ElMessage.warning('请选择测试集或输入新测试集名称');
+  }
+  
+  try {
+    const case_ids = selectedCases.value.map(c => c.id);
+    
+    if (suiteForm.new_suite_name) {
+      // 创建新测试集
+      await saveSuite({
+        name: suiteForm.new_suite_name,
+        description: suiteForm.description,
+        case_ids
+      });
+      ElMessage.success('已创建新测试集并添加用例');
+    } else {
+      // 添加到已有测试集
+      const existingSuite = suiteList.value.find((s: any) => s.id === suiteForm.suite_id);
+      if (existingSuite) {
+        // 获取已有用例
+        const res = await getSuiteCases(suiteForm.suite_id!);
+        const existingCaseIds = res.data.map((c: any) => c.id);
+        
+        // 合并用例ID（去重）
+        const allCaseIds = Array.from(new Set([...existingCaseIds, ...case_ids]));
+        
+        await saveSuite({
+          id: suiteForm.suite_id!,
+          name: existingSuite.name,
+          description: existingSuite.description,
+          case_ids: allCaseIds
+        });
+        ElMessage.success('已添加到测试集');
+      }
+    }
+    
+    suiteDialogVisible.value = false;
+    selectedCases.value = [];
+  } catch (e: any) {
+    ElMessage.error(e.message || '操作失败');
+  }
 };
 </script>
 
