@@ -12,14 +12,57 @@ const searchParams = ref({
   pageSize: 10,
   search: {
     file_name__icontains: "",
-    menu_id: ""
+    menu_id: "",
+    current_path: ""
   }
 });
 
-const koiDrawerRef = ref();
+const goUp = () => {
+    if (!searchParams.value.search.current_path) return;
+    const parts = searchParams.value.search.current_path.split("/").filter(Boolean);
+    parts.pop();
+    searchParams.value.search.current_path = parts.length ? parts.join("/") + "/" : "";
+    searchParams.value.currentPage = 1;
+    get_img_list();
+};
+
+const handleRowDblClick = (row: any) => {
+    if (row.is_folder) {
+        // Navigate down
+        searchParams.value.search.current_path = row.rel_path;
+        searchParams.value.currentPage = 1;
+        get_img_list();
+    }
+};
+
+const dialogVisible = ref(false);
 const loading = ref(false);
 const tableList = ref<any>([]);
 const app_menu_list = ref<any>([]);
+const selectionList = ref<any[]>([]);
+
+const handleSelectionChange = (val: any[]) => {
+  selectionList.value = val;
+};
+
+const BatchDelete = async () => {
+    MsgBox(`您确认需要删除选中的 ${selectionList.value.length} 项数据吗？`).then(async () => {
+        try {
+            for (const item of selectionList.value) {
+                 if (item.is_folder) {
+                     NoticeError("暂不支持批量删除文件夹：" + item.file_name);
+                     continue;
+                 }
+                 await delete_img({ id: item.id });
+            }
+            MsgSuccess("批量删除完成");
+            await get_img_list();
+            selectionList.value = [];
+        } catch (e) {
+            NoticeError("删除失败");
+        }
+    });
+};
 
 const get_app_select = async () => {
   const res: any = await app_menu_select({});
@@ -50,7 +93,7 @@ const resetsearch = async () => {
 };
 
 const Add = () => {
-  koiDrawerRef.value.koiOpen();
+  dialogVisible.value = true;
 };
 
 const Delete = async (row: any) => {
@@ -67,8 +110,13 @@ const handleConfirm = async () => {
   if (uploadBatchRef.value && uploadBatchRef.value.fileList.length > 0) {
     await uploadBatchRef.value.submitUpload();
   } else {
-    koiDrawerRef.value.koiQuickClose();
+    dialogVisible.value = false;
   }
+};
+
+const handleUploadSuccess = () => {
+  get_img_list();
+  dialogVisible.value = false;
 };
 
 onMounted(() => {
@@ -92,17 +140,35 @@ onMounted(() => {
           <el-button type="primary" icon="search" plain @click="get_img_list">搜索</el-button>
           <el-button type="danger" icon="refresh" plain @click="resetsearch">重置</el-button>
           <el-button type="primary" icon="plus" plain @click="Add()">批量新增/上传</el-button>
+          <el-button type="danger" icon="Delete" plain :disabled="selectionList.length === 0" @click="BatchDelete">批量删除</el-button>
         </el-form-item>
       </el-form>
       
+      <div class="flex items-center gap-2 mb-2" v-if="searchParams.search.current_path">
+        <el-button link type="primary" @click="goUp">
+          <el-icon><Back /></el-icon> 返回上一级
+        </el-button>
+        <span class="text-gray-500">当前路径: /{{ searchParams.search.current_path }}</span>
+      </div>
+      
       <div class="h-10px"></div>
       
-      <el-table v-loading="loading" border :data="tableList" empty-text="暂时没有数据哟🌻">
+      <el-table v-loading="loading" border :data="tableList" empty-text="暂时没有数据哟🌻" @row-dblclick="handleRowDblClick" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55" align="center" />
         <el-table-column type="index" label="序号" width="80px" align="center"></el-table-column>
-        <el-table-column label="名称" prop="file_name" align="center" :show-overflow-tooltip="true"></el-table-column>
+        <el-table-column label="名称" prop="file_name" align="left" :show-overflow-tooltip="true">
+          <template #default="{ row }">
+             <div class="flex items-center gap-2 cursor-pointer">
+               <el-icon v-if="row.is_folder" class="text-yellow-500 text-lg"><Folder /></el-icon>
+               <el-icon v-else class="text-gray-400 text-lg"><Picture /></el-icon>
+               <span :class="{'text-primary font-bold': row.is_folder}">{{ row.file_name }}</span>
+             </div>
+          </template>
+        </el-table-column>
         <el-table-column label="预览" align="center">
           <template #default="scope">
             <el-image 
+              v-if="!scope.row.is_folder"
               class="w-100px h-60px" 
               :preview-teleported="true" 
               :preview-src-list="[scope.row.file_path]"
@@ -113,6 +179,7 @@ onMounted(() => {
                 <el-icon><Picture /></el-icon>
               </template>
             </el-image>
+            <div v-else class="text-gray-400 text-sm">文件夹</div>
           </template>
         </el-table-column>
         <el-table-column label="创建时间" prop="create_time" width="180px" align="center"></el-table-column>
@@ -134,17 +201,21 @@ onMounted(() => {
         @current-change="get_img_list" 
       />
 
-      <KoiDrawer ref="koiDrawerRef" title="批量上传图片" @koi-confirm="handleConfirm" @koi-cancel="koiDrawerRef.koiClose()">
-        <template #content>
-           <el-alert title="说明" type="info" description="支持批量选择图片，或通过按钮上传整个文件夹。上传后将自动关联至当前选中的项目。" show-icon :closable="false" style="margin-bottom: 20px" />
-           <KoiUploadBatch 
+      <el-dialog v-model="dialogVisible" title="批量上传图片" width="600px" align-center :close-on-click-modal="false">
+        <el-alert title="说明" type="info" description="支持批量选择图片，或通过按钮上传整个文件夹。上传后将自动关联至当前选中的项目。" show-icon :closable="false" style="margin-bottom: 20px" />
+        <KoiUploadBatch 
              ref="uploadBatchRef"
              action="/api/common/upload_airtest_img" 
              :data="{ menu_id: searchParams.search.menu_id }"
-             @success="get_img_list" 
-           />
+             @success="handleUploadSuccess" 
+        />
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="dialogVisible = false">取消</el-button>
+            <el-button type="primary" @click="handleConfirm">确定</el-button>
+          </span>
         </template>
-      </KoiDrawer>
+      </el-dialog>
     </KoiCard>
   </div>
 </template>

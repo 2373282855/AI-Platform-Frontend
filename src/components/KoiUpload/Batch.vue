@@ -83,6 +83,8 @@ const handleFolderChange = (event: any) => {
   }
   // 重置 input 以允许再次选择同一文件夹
   event.target.value = '';
+  // 自动开始上传
+  submitUpload();
 };
 
 const removeFile = (index: number) => {
