@@ -80,6 +80,10 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
               proxyReq.setHeader('X-Frame-Options', "SAMEORIGIN");
             });
           },
+        },
+        "/media": {
+          target: 'http://localhost:8000',
+          changeOrigin: true,
         }
       }
     },
