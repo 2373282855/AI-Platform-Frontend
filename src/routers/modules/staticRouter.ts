@@ -246,78 +246,7 @@ export const staticRouter: RouteRecordRaw[] = [
       }
     ]
   },
-  {
-    path: "/web_auto", // 路由访问路径[唯一]
-    component: Layout, // 登录进入这个页面，这个页面是整个布局
-    meta: {
-      title: "WEB管理", // 标题
-      enName: "Web Auto", // 英文名称
-      icon: "HelpFilled", // 图标
-      isHide: "1", // 代表路由在菜单中是否隐藏，是否隐藏[0隐藏，1显示]
-      isLink: "", // 是否外链[有值则是外链]
-      isKeepAlive: "0", // 是否缓存路由数据[0是，1否]
-      isFull: "0", // 是否缓存全屏[0是，1否]
-      isAffix: "0" // 是否缓存固定路由[0是，1否]
-    },
-    children: [
-      {
-        path: "/element_manager", // [唯一]
-        component: () => import("@/views/web_view/element_manager.vue"),
-        meta: {
-          title: "元素管理", // 标题
-          enName: "Element Manage", // 英文名称
-          icon: "ElementPlus", // 图标
-          isHide: "1", // 代表路由在菜单中是否隐藏，是否隐藏[0隐藏，1显示]
-          isLink: "", // 是否外链[有值则是外链]
-          isKeepAlive: "1", // 是否缓存路由数据[0是，1否]
-          isFull: "1", // 是否缓存全屏[0是，1否]
-          isAffix: "1" // 是否缓存固定路由[0是，1否]
-        }
-      },
-      {
-        path: "/web", // [唯一]
-        component: () => import("@/views/web_view/web.vue"),
-        meta: {
-          title: "Web 自动化", // 标题
-          enName: "Web Auto", // 英文名称
-          icon: "ChromeFilled", // 图标
-          isHide: "1", // 代表路由在菜单中是否隐藏，是否隐藏[0隐藏，1显示]
-          isLink: "", // 是否外链[有值则是外链]
-          isKeepAlive: "1", // 是否缓存路由数据[0是，1否]
-          isFull: "1", // 是否缓存全屏[0是，1否]
-          isAffix: "1" // 是否缓存固定路由[0是，1否]
-        }
-      },
-      {
-        path: "/web_group", // [唯一]
-        component: () => import("@/views/web_view/web_group.vue"),
-        meta: {
-          title: "Web-场景管理", // 标题
-          enName: "Group Manage", // 英文名称
-          icon: "Memo", // 图标
-          isHide: "1", // 代表路由在菜单中是否隐藏，是否隐藏[0隐藏，1显示]
-          isLink: "", // 是否外链[有值则是外链]
-          isKeepAlive: "1", // 是否缓存路由数据[0是，1否]
-          isFull: "1", // 是否缓存全屏[0是，1否]
-          isAffix: "1" // 是否缓存固定路由[0是，1否]
-        }
-      },
-      {
-        path: "/web_result_list", // [唯一]
-        component: () => import("@/views/web_view/web_result_list.vue"),
-        meta: {
-          title: "Web结果", // 标题
-          enName: "Web Result", // 英文名称
-          icon: "Document", // 图标
-          isHide: "1", // 代表路由在菜单中是否隐藏，是否隐藏[0隐藏，1显示]
-          isLink: "", // 是否外链[有值则是外链]
-          isKeepAlive: "1", // 是否缓存路由数据[0是，1否]
-          isFull: "1", // 是否缓存全屏[0是，1否]
-          isAffix: "1" // 是否缓存固定路由[0是，1否]
-        }
-      }
-    ]
-  },
+
   {
     path: "/app_auto", // 路由访问路径[唯一]
     component: Layout, // 登录进入这个页面，这个页面是整个布局
@@ -654,20 +583,7 @@ export const staticRouter: RouteRecordRaw[] = [
       isAffix: "0" // 是否缓存固定路由[0是，1否]
     }
   },
-  {
-    path: "/web_report", // 路由访问路径[唯一]
-    component: () => import("@/views/web_view/web_report.vue"),
-    meta: {
-      title: "WEB测试报告", // 标题
-      enName: "Web Report", // 英文名称
-      icon: "ChromeFilled", // 图标
-      isHide: "0", // 代表路由在菜单中是否隐藏，是否隐藏[0隐藏，1显示]
-      isLink: "", // 是否外链[有值则是外链]
-      isKeepAlive: "0", // 是否缓存路由数据[0是，1否]
-      isFull: "0", // 是否缓存全屏[0是，1否]
-      isAffix: "0" // 是否缓存固定路由[0是，1否]
-    }
-  },
+
   {
     path: "/system/static", // 路由访问路径[唯一]
     name: "staticPage", // 命名路由[唯一]
